@@ -12,8 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
+  widgetbook: ^3.3.0
 
 dev_dependencies:
   flutter_test:
