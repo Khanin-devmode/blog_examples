@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   late final AnimationController _controller = AnimationController(
     animationBehavior: AnimationBehavior.preserve,
-    duration: const Duration(seconds: 4),
+    duration: const Duration(seconds: 2),
     vsync: this,
   )..repeat(reverse: false);
 
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ).animate(
                   CurvedAnimation(
                     parent: _controller,
-                    curve: Curves.elasticInOut,
+                    curve: Curves.easeIn,
                   ),
                 ),
                 child: const Padding(
