@@ -65,24 +65,22 @@ class TicketRowPrototype extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ClipPath(
-            clipper: InvertedBorderRadiusRight(),
-            child: Container(
-              width: 120,
-              height: 120,
-              // decoration: const BoxDecoration(
-              //   color: Colors.white70,
-              //   borderRadius: BorderRadius.only(
-              //     topLeft: Radius.circular(16),
-              //     bottomLeft: Radius.circular(16),
-              //   ),
-              //   border: Border(
-              //     top: BorderSide(),
-              //     left: BorderSide(),
-              //     bottom: BorderSide(),
-              //   ),
-              // ),
-            ),
+          Container(
+            width: 120,
+            height: 120,
+            decoration: ShapeDecoration(shape: CustomShape()),
+            // decoration: const BoxDecoration(
+            //   color: Colors.white70,
+            //   borderRadius: BorderRadius.only(
+            //     topLeft: Radius.circular(16),
+            //     bottomLeft: Radius.circular(16),
+            //   ),
+            //   border: Border(
+            //     top: BorderSide(),
+            //     left: BorderSide(),
+            //     bottom: BorderSide(),
+            //   ),
+            // ),
           ),
           Expanded(
             child: ClipPath(
@@ -174,5 +172,34 @@ class CirclePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class CustomShape extends ShapeBorder {
+  @override
+  // TODO: implement dimensions
+  EdgeInsetsGeometry get dimensions => throw UnimplementedError();
+
+  @override
+  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
+    // TODO: implement getInnerPath
+    throw UnimplementedError();
+  }
+
+  @override
+  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
+    // TODO: implement getOuterPath
+    throw UnimplementedError();
+  }
+
+  @override
+  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
+    // TODO: implement paint
+  }
+
+  @override
+  ShapeBorder scale(double t) {
+    // TODO: implement scale
+    throw UnimplementedError();
   }
 }
