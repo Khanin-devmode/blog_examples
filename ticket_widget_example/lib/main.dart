@@ -38,10 +38,23 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text('Ticket'),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[TicketRowPrototype()],
+          children: <Widget>[
+            TicketRowPrototype(),
+            CustomPaint(
+              painter: InvertedBorderPainter(
+                borderWidth: 20,
+                borderColor: Colors.red,
+                radius: 20,
+              ),
+              child: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: Center(child: Text('this is some text!'))),
+            ),
+          ],
         ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
@@ -68,7 +81,22 @@ class TicketRowPrototype extends StatelessWidget {
           Container(
             width: 120,
             height: 120,
-            decoration: ShapeDecoration(shape: CustomShape()),
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: Border.all(
+                    color: Colors.red,
+                    width: 8.0,
+                  ) +
+                  Border.all(
+                    color: Colors.green,
+                    width: 8.0,
+                  ) +
+                  Border.all(
+                    color: Colors.blue,
+                    width: 8.0,
+                  ),
+            ),
+            // decoration: ShapeDecoration(shape: CustomShape()),
             // decoration: const BoxDecoration(
             //   color: Colors.white70,
             //   borderRadius: BorderRadius.only(
@@ -202,4 +230,58 @@ class CustomShape extends ShapeBorder {
     // TODO: implement scale
     throw UnimplementedError();
   }
+}
+
+class InvertedBorderPainter extends CustomPainter {
+  final double borderWidth;
+  final Color borderColor;
+  final double radius;
+
+  InvertedBorderPainter({
+    this.borderWidth = 5.0,
+    this.borderColor = Colors.black,
+    this.radius = 20.0,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = borderWidth;
+
+    Path borderPath = Path()
+      ..moveTo(0, radius)
+      ..arcToPoint(
+        Offset(radius, 0),
+        clockwise: false,
+        radius: Radius.circular(radius),
+      )
+      ..lineTo(size.width - radius, 0)
+      ..arcToPoint(
+        Offset(size.width, radius),
+        clockwise: false,
+        radius: Radius.circular(radius),
+      )
+      ..lineTo(size.width, size.height - radius)
+      ..arcToPoint(
+        Offset(size.width - radius, size.height),
+        clockwise: false,
+        radius: Radius.circular(radius),
+      )
+      ..lineTo(radius, size.height)
+      ..arcToPoint(
+        Offset(0, size.height - radius),
+        clockwise: false,
+        radius: Radius.circular(radius),
+      )
+      ..close();
+
+    canvas.drawPath(borderPath, paint);
+
+    // Inner fill or additional styling can be added here if needed
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
