@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextFormField(
                 decoration: InputDecoration(border: outlineInputBorder),
                 minLines: 2,
-                maxLines: 1,
+                maxLines: 2,
               ),
               // const SizedBox(height: 16.0),
               // TextFormField(
