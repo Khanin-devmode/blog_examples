@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -36,23 +36,33 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text('Ticket'),
+        title: Text(
+          'Ticket',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TicketRowPrototype(),
-            CustomPaint(
-              painter: InvertedBorderPainter(
-                borderWidth: 20,
-                borderColor: Colors.red,
-                radius: 20,
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TicketWidget(),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TicketWidget(
+                headWidth: 100,
+                height: 100,
               ),
-              child: SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: Center(child: Text('this is some text!'))),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: TicketWidget(
+                headWidth: 200,
+              ),
             ),
           ],
         ),
@@ -62,194 +72,65 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class TicketRowPrototype extends StatelessWidget {
-  const TicketRowPrototype({
-    super.key,
-  });
+class TicketWidget extends StatelessWidget {
+  const TicketWidget(
+      {super.key, this.height = 120, this.headWidth = 140, this.radius = 20});
+
+  final double height;
+  final double headWidth;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      height: 150,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.grey,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: Border.all(
-                    color: Colors.red,
-                    width: 8.0,
-                  ) +
-                  Border.all(
-                    color: Colors.green,
-                    width: 8.0,
-                  ) +
-                  Border.all(
-                    color: Colors.blue,
-                    width: 8.0,
-                  ),
+    return Row(
+      children: [
+        SizedBox(
+          width: headWidth,
+          height: height,
+          child: CustomPaint(
+            painter: InvertedBorderPainter(
+              borderWidth: 2,
+              borderColor: Colors.red,
+              radius: radius,
             ),
-            // decoration: ShapeDecoration(shape: CustomShape()),
-            // decoration: const BoxDecoration(
-            //   color: Colors.white70,
-            //   borderRadius: BorderRadius.only(
-            //     topLeft: Radius.circular(16),
-            //     bottomLeft: Radius.circular(16),
-            //   ),
-            //   border: Border(
-            //     top: BorderSide(),
-            //     left: BorderSide(),
-            //     bottom: BorderSide(),
-            //   ),
-            // ),
+            child: const Center(child: Text('This is head')),
           ),
-          Expanded(
-            child: ClipPath(
-              clipper: InvertedBorderRadiusLeft(),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
-                  border: Border(
-                    top: BorderSide(),
-                    right: BorderSide(),
-                    bottom: BorderSide(),
-                  ),
-                ),
+        ),
+        Expanded(
+          child: SizedBox(
+            height: height,
+            child: CustomPaint(
+              painter: InvertedBorderPainter(
+                borderWidth: 2,
+                borderColor: Colors.blue,
+                radius: radius,
               ),
+              child: const Center(child: Text('This is tail')),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
-  }
-}
-
-class InvertedBorderRadiusLeft extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    const double radius = 12;
-    path.moveTo(radius, 0);
-    path.lineTo(size.width, 0);
-
-    path.lineTo(size.width, size.height);
-    path.lineTo(radius, size.height);
-
-    path.arcToPoint(Offset(0, size.height - radius),
-        radius: Radius.circular(radius), clockwise: false);
-    path.lineTo(0, radius);
-    // path.quadraticBezierTo(radius, radius, radius, 0);
-    path.arcToPoint(Offset(radius, 0),
-        radius: Radius.circular(radius), clockwise: false);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
-    return false;
-  }
-}
-
-class InvertedBorderRadiusRight extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    const double radius = 12;
-    path.lineTo(size.width - radius, 0);
-    path.arcToPoint(Offset(size.width, radius),
-        radius: Radius.circular(radius), clockwise: false);
-    path.lineTo(size.width, size.height - radius);
-    path.arcToPoint(Offset(size.width - radius, size.height),
-        radius: Radius.circular(radius), clockwise: false);
-    path.lineTo(0, size.height);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
-    return false;
-  }
-}
-
-class CirclePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var radius = 11;
-
-    var paint = Paint();
-    paint.color = Colors.black;
-
-    // return canvas.drawPath(path, paint);
-    return canvas.drawCircle(Offset(0, 0), radius + 2, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-class CustomShape extends ShapeBorder {
-  @override
-  // TODO: implement dimensions
-  EdgeInsetsGeometry get dimensions => throw UnimplementedError();
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection? textDirection}) {
-    // TODO: implement getInnerPath
-    throw UnimplementedError();
-  }
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    // TODO: implement getOuterPath
-    throw UnimplementedError();
-  }
-
-  @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    // TODO: implement paint
-  }
-
-  @override
-  ShapeBorder scale(double t) {
-    // TODO: implement scale
-    throw UnimplementedError();
   }
 }
 
 class InvertedBorderPainter extends CustomPainter {
   final double borderWidth;
   final Color borderColor;
+  final Color backgroundColor;
   final double radius;
+  final double ticketHeadWidth;
 
   InvertedBorderPainter({
-    this.borderWidth = 5.0,
+    this.borderWidth = 2,
     this.borderColor = Colors.black,
+    this.backgroundColor = Colors.black12,
     this.radius = 20.0,
+    this.ticketHeadWidth = 50,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
-
     Path borderPath = Path()
       ..moveTo(0, radius)
       ..arcToPoint(
@@ -277,7 +158,18 @@ class InvertedBorderPainter extends CustomPainter {
       )
       ..close();
 
-    canvas.drawPath(borderPath, paint);
+    Paint bgPaint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.fill
+      ..strokeWidth = borderWidth;
+
+    Paint borderPaint = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = borderWidth;
+
+    canvas.drawPath(borderPath, bgPaint);
+    canvas.drawPath(borderPath, borderPaint);
 
     // Inner fill or additional styling can be added here if needed
   }
