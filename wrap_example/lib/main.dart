@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,42 +54,66 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Text(
-            'Number of items',
-          ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              children: [Text('FractionallySizedBox(widthFactor:0.25)')],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            const Text(
+              'Number of items',
             ),
-          ),
-          Wrap(
-            children: List.generate(
-              _counter,
-              (index) => const CustomFractionallySizedBox(widthFactor: 0.25),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              children: [Text('FractionallySizedBox(widthFactor:0.3)')],
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [Text('Expanded widgets in a Row widget')],
+              ),
             ),
-          ),
-          Wrap(
-            alignment: WrapAlignment.start,
-            children: List.generate(
-              _counter,
-              (index) => const CustomFractionallySizedBox(widthFactor: 0.3),
+            Row(
+              children: List.generate(
+                _counter,
+                (index) => Expanded(
+                    child: Container(
+                  height: 24,
+                  decoration: BoxDecoration(border: Border.all()),
+                )),
+              ),
             ),
-          )
-        ],
+            const SizedBox(height: 16),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                      'FractionallySizedBox(widthFactor:0.25) in a Wrap widget')
+                ],
+              ),
+            ),
+            Wrap(
+              children: List.generate(
+                _counter,
+                (index) => const CustomFractionallySizedBox(widthFactor: 0.25),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text('FractionallySizedBox(widthFactor:0.3) in a Wrap widget')
+                ],
+              ),
+            ),
+            Wrap(
+              alignment: WrapAlignment.start,
+              children: List.generate(
+                _counter,
+                (index) => const CustomFractionallySizedBox(widthFactor: 0.3),
+              ),
+            )
+          ],
+        ),
       ),
       floatingActionButton: SizedBox.expand(
         child: Stack(
