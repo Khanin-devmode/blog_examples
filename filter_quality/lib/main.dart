@@ -30,15 +30,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  final List<double> sizeList = [50, 100, 200, 300];
+  final List<double> containerSizeList = [50, 100, 200, 300];
+  final List<double> imageSizeList = [50, 100, 200, 300];
 
   @override
   Widget build(BuildContext context) {
@@ -65,47 +58,115 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(sizeList.length, (i) {
-                      final size = sizeList[i];
-                      return Container(
-                        alignment: Alignment.center,
-                        width: size,
-                        height: size,
-                        color: Colors.red,
-                        child: Text('$size x $size'),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Container Size 50 x 50 pixel'),
+                        const SizedBox(width: 20),
+                        Container(
+                          alignment: Alignment.center,
+                          width: 50,
+                          height: 50,
+                          color: Colors.red,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(width: 200),
+                        Column(
+                          children: [
+                            const Text('Source image size'),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                ...List.generate(
+                                  imageSizeList.length,
+                                  (x) {
+                                    final size = imageSizeList[x];
+                                    return SizedBox(
+                                      width: 50,
+                                      child: Text('$size x $size'),
+                                    );
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    ...List.generate(FilterQuality.values.length, (y) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                              width: 200,
+                              child: Text(FilterQuality.values[y].toString())),
+                          ...List.generate(imageSizeList.length, (x) {
+                            return Image.asset(
+                              'assets/flutter_logo_${imageSizeList[x]}px.png',
+                              fit: BoxFit.cover,
+                              width: 50,
+                              height: 50,
+                              filterQuality: FilterQuality.values[y],
+                            );
+                          })
+                        ],
                       );
-                    }),
-                  ),
-                  ...List.generate(FilterQuality.values.length, (x) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        sizeList.length,
-                        (i) {
-                          return Image.asset(
-                            'assets/flutter_logo_100px.png',
-                            fit: BoxFit.cover,
-                            width: sizeList[i],
-                            height: sizeList[i],
-                            filterQuality: FilterQuality.values[x],
-                          );
-                        },
-                      ),
-                    );
-                  }),
-                ]),
+                    })
+                  ],
+                ),
               ),
+              // child: SingleChildScrollView(
+              //   child: Column(children: [
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: List.generate(containerSizeList.length, (i) {
+              //         final size = containerSizeList[i];
+              //         return Container(
+              //           alignment: Alignment.center,
+              //           width: size,
+              //           height: size,
+              //           color: Colors.red,
+              //           child: Text('$size x $size'),
+              //         );
+              //       }),
+              //     ),
+              //     ...List.generate(FilterQuality.values.length, (x) {
+              //       return Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           SizedBox(
+              //               width: 120,
+              //               child: Text(FilterQuality.values[x].toString())),
+              //           ...List.generate(
+              //             containerSizeList.length,
+              //             (i) {
+              //               return Image.asset(
+              //                 'assets/flutter_logo_100px.png',
+              //                 fit: BoxFit.cover,
+              //                 width: containerSizeList[i],
+              //                 height: containerSizeList[i],
+              //                 filterQuality: FilterQuality.values[x],
+              //               );
+              //             },
+              //           )
+              //         ],
+              //       );
+              //     }),
+              //   ]),
+              // ),
             ),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
         ),
       ),
     );
