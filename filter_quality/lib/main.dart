@@ -30,8 +30,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<double> containerSizeList = [50, 100, 200, 300];
+  final List<double> containerSizeList = [50, 100, 200];
   final List<double> imageSizeList = [50, 100, 200, 300];
+  final double gap = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -39,134 +40,135 @@ class _MyHomePageState extends State<MyHomePage> {
     final double dpr = MediaQuery.of(context).devicePixelRatio;
 
     return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                  alignment: Alignment.topCenter,
-                  child: Text('Logical pixels: ${size.width} px, DPR: $dpr')),
-            ),
-            Positioned.fill(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: RotatedBox(
-                  quarterTurns: -1,
-                  child: Text('Logical pixels: ${size.height} px, DPR: $dpr'),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
+      child: DefaultTabController(
+        length: containerSizeList.length,
+        child: Scaffold(
+          bottomNavigationBar: TabBar(tabs: [
+            ...List.generate(containerSizeList.length, (i) {
+              final size = containerSizeList[i];
+              return Tab(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Container Size 50 x 50 pixel'),
-                        const SizedBox(width: 20),
-                        Container(
-                          alignment: Alignment.center,
-                          width: 50,
-                          height: 50,
-                          color: Colors.red,
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(width: 200),
-                        Column(
-                          children: [
-                            const Text('Source image size'),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                ...List.generate(
-                                  imageSizeList.length,
-                                  (x) {
-                                    final size = imageSizeList[x];
-                                    return SizedBox(
-                                      width: 50,
-                                      child: Text('$size x $size'),
-                                    );
-                                  },
-                                ),
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    ...List.generate(FilterQuality.values.length, (y) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                              width: 200,
-                              child: Text(FilterQuality.values[y].toString())),
-                          ...List.generate(imageSizeList.length, (x) {
-                            return Image.asset(
-                              'assets/flutter_logo_${imageSizeList[x]}px.png',
-                              fit: BoxFit.cover,
-                              width: 50,
-                              height: 50,
-                              filterQuality: FilterQuality.values[y],
-                            );
-                          })
-                        ],
-                      );
-                    })
+                    Text('Container Size'),
+                    Text('$size x $size'),
                   ],
                 ),
+              );
+            })
+          ]),
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                    alignment: Alignment.topCenter,
+                    child: Text('Logical pixels: ${size.width} px, DPR: $dpr')),
               ),
-              // child: SingleChildScrollView(
-              //   child: Column(children: [
-              //     Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: List.generate(containerSizeList.length, (i) {
-              //         final size = containerSizeList[i];
-              //         return Container(
-              //           alignment: Alignment.center,
-              //           width: size,
-              //           height: size,
-              //           color: Colors.red,
-              //           child: Text('$size x $size'),
-              //         );
-              //       }),
-              //     ),
-              //     ...List.generate(FilterQuality.values.length, (x) {
-              //       return Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           SizedBox(
-              //               width: 120,
-              //               child: Text(FilterQuality.values[x].toString())),
-              //           ...List.generate(
-              //             containerSizeList.length,
-              //             (i) {
-              //               return Image.asset(
-              //                 'assets/flutter_logo_100px.png',
-              //                 fit: BoxFit.cover,
-              //                 width: containerSizeList[i],
-              //                 height: containerSizeList[i],
-              //                 filterQuality: FilterQuality.values[x],
-              //               );
-              //             },
-              //           )
-              //         ],
-              //       );
-              //     }),
-              //   ]),
-              // ),
-            ),
-          ],
+              Positioned.fill(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: RotatedBox(
+                    quarterTurns: -1,
+                    child: Text('Logical pixels: ${size.height} px, DPR: $dpr'),
+                  ),
+                ),
+              ),
+              TabBarView(
+                children: [
+                  ...List.generate(containerSizeList.length, (z) {
+                    final containerSize = containerSizeList[z];
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      'Container Size $containerSize x $containerSize pixel'),
+                                  const SizedBox(width: 20),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: containerSize,
+                                    height: containerSize,
+                                    color: Colors.red,
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(width: 200),
+                                  Column(
+                                    children: [
+                                      const Text('Source image size'),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          ...List.generate(
+                                            imageSizeList.length,
+                                            (x) {
+                                              final size = imageSizeList[x];
+                                              return Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: gap),
+                                                child: SizedBox(
+                                                  width: containerSize,
+                                                  child: Text('$size x $size'),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              ...List.generate(FilterQuality.values.length,
+                                  (y) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                          width: 200,
+                                          child: Text(FilterQuality.values[y]
+                                              .toString())),
+                                      ...List.generate(imageSizeList.length,
+                                          (x) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(right: gap),
+                                          child: Image.asset(
+                                            'assets/flutter_logo_${imageSizeList[x]}px.png',
+                                            fit: BoxFit.cover,
+                                            width: containerSize,
+                                            height: containerSize,
+                                            filterQuality:
+                                                FilterQuality.values[y],
+                                          ),
+                                        );
+                                      })
+                                    ],
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  })
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
