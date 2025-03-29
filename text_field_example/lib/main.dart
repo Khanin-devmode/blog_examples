@@ -39,23 +39,20 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // Row(
+            //   children: [
+            //     CustomContainer(
+            //       size: 48,
+            //     ),
+            //     Expanded(
+            //       child: CustomTextFormField(),
+            //     ),
+            //   ],
+            // ),
             Row(
               children: [
-                CustomContainer(
-                  size: 48,
-                ),
                 Expanded(
-                  child: CustomTextFormField(),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                CustomContainer(
-                  size: 48,
-                ),
-                Expanded(
-                  child: IncorrectTextFormField(),
+                  child: CustomErrorTextFormField(),
                 ),
               ],
             ),
@@ -83,7 +80,102 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       style: TextStyle(fontSize: fontSize, height: height),
       decoration: InputDecoration(
-          border: const OutlineInputBorder(), contentPadding: contentPadding),
+        border: const OutlineInputBorder(),
+        contentPadding: contentPadding,
+        // error: Row(
+        //   children: [
+        //     Icon(
+        //       Icons.info,
+        //       color: Colors.red[800],
+        //     ),
+        //     SizedBox(width: 4),
+        //     Text(
+        //       'This is error text',
+        //       style: TextStyle(color: Colors.red[800]),
+        //     )
+        //   ],
+        // ),
+      ),
+      validator: (value) {
+        if (value != null && value.contains('@')) {
+          return 'The "@" symbol is not allowed.';
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.always,
+    );
+  }
+}
+
+class CustomErrorTextFormField extends StatefulWidget {
+  const CustomErrorTextFormField({super.key});
+
+  @override
+  State<CustomErrorTextFormField> createState() =>
+      _CustomErrorTextFormFieldState();
+}
+
+class _CustomErrorTextFormFieldState extends State<CustomErrorTextFormField> {
+  final ValueNotifier<String?> _errorTextNotifier =
+      ValueNotifier<String?>(null);
+
+  String? _someValidationLogic(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Textfield cannot be empty';
+    }
+    return null;
+  }
+
+  @override
+  void dispose() {
+    _errorTextNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IntrinsicHeight(
+          child: TextFormField(
+            style: TextStyle(fontSize: 6),
+            autovalidateMode: AutovalidateMode.always,
+            validator: (value) {
+              final result = _someValidationLogic(value);
+
+              if (result != _errorTextNotifier.value) {
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => _errorTextNotifier.value = result,
+                );
+              }
+              return result;
+            },
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                errorStyle: TextStyle(fontSize: 0)),
+          ),
+        ),
+        ValueListenableBuilder(
+          valueListenable: _errorTextNotifier,
+          builder: (context, errorText, child) {
+            return _errorTextNotifier.value != null
+                ? Row(
+                    children: [
+                      Icon(
+                        Icons.info,
+                        color: Colors.red[900],
+                      ),
+                      Text(
+                        errorText.toString(),
+                        style: TextStyle(color: Colors.red[900]),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink();
+          },
+        ),
+      ],
     );
   }
 }
@@ -93,13 +185,10 @@ class IncorrectTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(border: Border.all()),
-      child: TextFormField(
-        style: const TextStyle(fontSize: 32, height: 1.0),
-        decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 20)),
+    return TextFormField(
+      style: const TextStyle(fontSize: 12),
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
       ),
     );
   }
@@ -112,7 +201,7 @@ class CustomContainer extends StatelessWidget {
   const CustomContainer({
     super.key,
     this.size = 48,
-    this.color = Colors.red,
+    this.color = Colors.blue,
   });
 
   @override
