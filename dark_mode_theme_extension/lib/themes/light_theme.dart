@@ -1,7 +1,7 @@
 import 'package:dark_mode_theme_extension/themes/design_system_colors.dart';
 import 'package:flutter/material.dart';
 
-const lightTheme = DesignSystemColors(
+const lightThemeColors = DesignSystemColors(
   background: Color(0xFFFFFFFF),
   border: Color(0xFFE0E0E0),
   shadow: Color(0x40000000),

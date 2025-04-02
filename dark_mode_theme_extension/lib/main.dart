@@ -1,5 +1,6 @@
 import 'package:dark_mode_theme_extension/themes/dark_theme.dart';
 import 'package:dark_mode_theme_extension/themes/light_theme.dart';
+import 'package:dark_mode_theme_extension/widgets/custome_card.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,9 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData.light().copyWith(extensions: [lightTheme]),
-      darkTheme: ThemeData.dark().copyWith(extensions: [darkTheme]),
+      theme: ThemeData.light().copyWith(extensions: [lightThemeColors]),
+      darkTheme: ThemeData.dark().copyWith(extensions: [darkThemeColors]),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      themeMode: ThemeMode.dark,
     );
   }
 }
@@ -55,6 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            CustomCard(
+              title: 'Title',
+              subtitle: 'sub-title',
+              content: 'This is contenxt',
+              icon: Icons.add,
             ),
           ],
         ),
