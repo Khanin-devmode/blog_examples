@@ -1,4 +1,4 @@
-import 'package:dark_mode_theme_extension/themes/extension.dart';
+import 'package:dark_mode_theme_extension/themes/theme_helpers.dart';
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
@@ -8,12 +8,12 @@ class CustomCard extends StatelessWidget {
   final IconData icon;
 
   const CustomCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.content,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
