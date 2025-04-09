@@ -1,5 +1,6 @@
 import 'package:dark_mode_theme_extension/themes/dark_theme.dart';
 import 'package:dark_mode_theme_extension/themes/light_theme.dart';
+import 'package:dark_mode_theme_extension/themes/theme_helpers.dart';
 import 'package:dark_mode_theme_extension/themes/theme_mode_cubit.dart';
 import 'package:dark_mode_theme_extension/widgets/custom_card.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final colors = context.designSystemsColors;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -52,29 +55,39 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            CustomCard(
-              title: 'Title',
-              subtitle: 'sub-title',
-              content: 'This is contenxt',
-              icon: Icons.add,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomCard(
+                title: 'Title',
+                subtitle: 'sub-title',
+                content: 'This is contenxt',
+                icon: Icons.add,
+              ),
             ),
-            BlocBuilder<ThemeModeCubit, ThemeMode>(
-              builder: (context, state) {
-                return Switch(
-                  value: state == ThemeMode.dark,
-                  onChanged: (bool newValue) {
-                    if (newValue) {
-                      context.read<ThemeModeCubit>().updateThemeMode(
-                        ThemeMode.dark,
-                      );
-                    } else {
-                      context.read<ThemeModeCubit>().updateThemeMode(
-                        ThemeMode.light,
-                      );
-                    }
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Dark Mode', style: TextStyle(color: colors.title)),
+                SizedBox(width: 4),
+                BlocBuilder<ThemeModeCubit, ThemeMode>(
+                  builder: (context, state) {
+                    return Switch(
+                      value: state == ThemeMode.dark,
+                      onChanged: (bool newValue) {
+                        if (newValue) {
+                          context.read<ThemeModeCubit>().updateThemeMode(
+                            ThemeMode.dark,
+                          );
+                        } else {
+                          context.read<ThemeModeCubit>().updateThemeMode(
+                            ThemeMode.light,
+                          );
+                        }
+                      },
+                    );
                   },
-                );
-              },
+                ),
+              ],
             ),
           ],
         ),
